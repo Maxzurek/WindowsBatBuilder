@@ -38,7 +38,7 @@ public class Core
 	{
 		try
     	{
-			String version = "1.0";
+			String version = "2.0";
 			FileWriter myWriter = new FileWriter("version.txt");
 			myWriter.write(version);
 			myWriter.close();
