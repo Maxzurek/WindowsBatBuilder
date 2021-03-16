@@ -1,0 +1,28 @@
+project.data.DataUser
+(
+class java.lang.String:Administrateur~
+class java.lang.String:~
+class java.lang.String:DefaultAccount~
+java.util.ArrayList<java.lang.String>:[Guess]~
+)
+project.data.DataUser
+(
+class java.lang.String:max~
+class java.lang.String:~
+class java.lang.String:~
+java.util.ArrayList<java.lang.String>:[]~
+)
+project.data.DataUser
+(
+class java.lang.String:joe~
+class java.lang.String:~
+class java.lang.String:~
+java.util.ArrayList<java.lang.String>:[]~
+)
+project.data.DataUser
+(
+class java.lang.String:bob~
+class java.lang.String:~
+class java.lang.String:~
+java.util.ArrayList<java.lang.String>:[]~
+)
