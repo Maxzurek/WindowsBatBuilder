@@ -4,14 +4,23 @@ class java.lang.String:Default Bat Data~
 class java.lang.String:rem Ajout d'utilisateur: max
 net user "max" /ADD
 
-rem Ajout d'utilisateur: joe
-net user "joe" /ADD
-
 rem Ajout d'utilisateur: bob
 net user "bob" /ADD
 
 rem Ajout du groupe: group1
 net localgroup "group1" /ADD
+
+rem Ajouter un utilisateur au groupe
+net localgroup "group1" max /ADD
+
+rem Ajouter un utilisateur au groupe
+net localgroup "group1" bob /ADD
+
+rem Ajouter un utilisateur au groupe
+net localgroup "Administrateurs" bob /ADD
+
+rem Ajouter un utilisateur au groupe
+net localgroup "Administrateurs" max /ADD
 
 ~
 )

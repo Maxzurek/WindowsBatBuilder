@@ -357,7 +357,7 @@ public class DataOperations extends DataCenter
 		{
 			DataUser user = (DataUser) userData;
 			
-			if(user.getPrimaryGroup() != null)
+			if(user.getPrimaryGroup() == null)
 			{
 				user.setPrimaryGroup(groupName);
 			}
@@ -397,7 +397,7 @@ public class DataOperations extends DataCenter
 			
 			if(user.getPrimaryGroup() != null)
 			{
-				user.setPrimaryGroup(groupName);
+				user.setPrimaryGroup("");
 			}
 			else
 			{

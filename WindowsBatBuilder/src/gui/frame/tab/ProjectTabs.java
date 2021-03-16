@@ -50,6 +50,7 @@ public class ProjectTabs
 		tabbedPane.setSelectedIndex(openedTabIndex);
 		openedProjectPanels.put(projectName, projectPanel);
 		projectPanel.updateMainListData();
+		projectPanel.updateTreeListData();
 		projectPanel.updateCommandListData();	
 		
 		if(openedTabIndex > -1)

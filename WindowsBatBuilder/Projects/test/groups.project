@@ -1,20 +1,20 @@
 project.data.DataGroup
 (
 class java.lang.String:Administrateurs~
-java.util.ArrayList<java.lang.String>:[Users]~
+java.util.ArrayList<java.lang.String>:[Users, bob, max]~
 )
 project.data.DataGroup
 (
 class java.lang.String:Users~
-java.util.ArrayList<java.lang.String>:[null]~
+java.util.ArrayList<java.lang.String>:[]~
 )
 project.data.DataGroup
 (
 class java.lang.String:Guests~
-java.util.ArrayList<java.lang.String>:[null]~
+java.util.ArrayList<java.lang.String>:[]~
 )
 project.data.DataGroup
 (
 class java.lang.String:group1~
-java.util.ArrayList<java.lang.String>:[]~
+java.util.ArrayList<java.lang.String>:[max, bob]~
 )

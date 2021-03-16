@@ -30,6 +30,8 @@ import javax.swing.KeyStroke;
 import javax.swing.JTextArea;
 
 import project.data.Data;
+import project.data.DataGroup;
+import project.data.DataUser;
 import project.data.Data.DataType;
 import project.data.center.DataCenter;
 import project.data.center.DataOperations;
@@ -53,6 +55,9 @@ public class ProjectPanel
 	private JLabel existingMainLabel;
 	private JButton mainAddButton;
 	
+	private JScrollPane treeScrollPane;
+	private JTextArea treeTextArea;
+	
 	private JTextField commandSearchBar;
 	private DefaultListModel<Command> commandListModel;
 	private JList<Command> commandSearchList;
@@ -72,8 +77,7 @@ public class ProjectPanel
 	private JLabel previewLbl;
 	private JButton generateButton;
 	private Font italicFont;
-	
-	
+		
 	private String projectName = "";
 	private DataType dataType;
 	private Command selectedCommand;
@@ -81,6 +85,7 @@ public class ProjectPanel
 	private boolean userSelected = false;
 	private boolean groupSelected = false;
 	private boolean diskSelected = false;
+	private JLabel lbltreePreview;
 	
 	public JPanel getProjectPane() {return projectPanel;}
 	
@@ -154,6 +159,7 @@ public class ProjectPanel
               }
           }
 		});
+		
 		mainSearchBar = new JTextField();
 		mainSearchBar.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "enterKeyStroke");
 		mainSearchBar.getActionMap().put("enterKeyStroke", enterKeyStroke);
@@ -183,6 +189,40 @@ public class ProjectPanel
 			{ 
 			}
 		});
+		
+		lbltreePreview = new JLabel();
+		lbltreePreview.setText("(Tree Preview)");
+		lbltreePreview.setFont(new Font("Tahoma", Font.BOLD, 12));
+		GridBagConstraints gbc_lbltreePreview = new GridBagConstraints();
+		gbc_lbltreePreview.insets = new Insets(0, 0, 5, 0);
+		gbc_lbltreePreview.gridx = 3;
+		gbc_lbltreePreview.gridy = 1;
+		projectPanel.add(lbltreePreview, gbc_lbltreePreview);
+		
+		mainScrollPane = new JScrollPane(mainSearchList);
+		mainScrollPane.setPreferredSize(new Dimension(350,150));
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+		gbc_scrollPane.gridheight = 2;
+		gbc_scrollPane.gridx = 1;
+		gbc_scrollPane.gridy = 2;		
+		projectPanel.add(mainScrollPane, gbc_scrollPane);
+				
+		treeScrollPane = new JScrollPane();
+		treeScrollPane.setPreferredSize(new Dimension(350,150));
+		GridBagConstraints gbc_treeScrollPane = new GridBagConstraints();
+		gbc_treeScrollPane.fill = GridBagConstraints.BOTH;
+		gbc_treeScrollPane.insets = new Insets(0, 0, 5, 0);
+		gbc_treeScrollPane.gridheight = 2;
+		gbc_treeScrollPane.gridx = 3;
+		gbc_treeScrollPane.gridy = 2;		
+		projectPanel.add(treeScrollPane, gbc_treeScrollPane);
+		
+		treeTextArea = new JTextArea();
+		treeTextArea.setFont(new Font("Monospaced", Font.BOLD, 13));
+		treeTextArea.setEditable(false);
+		treeScrollPane.setViewportView(treeTextArea);
 		
 		mainNewLabel = new JLabel("");
 		mainNewLabel.setVisible(false);
@@ -271,16 +311,6 @@ public class ProjectPanel
 		gbc_addUserBtn.gridx = 2;
 		gbc_addUserBtn.gridy = 1;
 		projectPanel.add(mainAddButton, gbc_addUserBtn);
-		
-		mainScrollPane = new JScrollPane(mainSearchList);
-		mainScrollPane.setPreferredSize(new Dimension(350,150));
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
-		gbc_scrollPane.gridheight = 2;
-		gbc_scrollPane.gridx = 1;
-		gbc_scrollPane.gridy = 2;		
-		projectPanel.add(mainScrollPane, gbc_scrollPane);
 		
 		commandListModel = new DefaultListModel<Command>();
 		commandSearchList = new JList<Command>(commandListModel); //data has type String[]
@@ -500,6 +530,7 @@ public class ProjectPanel
 		groupToggle.setSelected(groupSelected);
 		diskToggle.setSelected(diskSelected);
 		updateMainListData();
+		updateTreeListData();
 		updateCommandListData();
 	}
 	
@@ -515,7 +546,7 @@ public class ProjectPanel
 		
 		if(searchBarInput.isEmpty())
 		{
-		
+			
 		}
 		
 		switch(dataType)
@@ -536,6 +567,7 @@ public class ProjectPanel
 				command = CommandManager.getAddUserCommand(searchBarInput, passwordEntered);
 				previewTextArea.append(command+"\n\n");
 				updateMainListData();
+				updateTreeListData();
 				setComponentsVisibility();
 			}
 			
@@ -547,6 +579,7 @@ public class ProjectPanel
 				command = CommandManager.getAddGroupCommand(searchBarInput);
 				previewTextArea.append(command+"\n\n");
 				updateMainListData();
+				updateTreeListData();
 				setComponentsVisibility();
 			}
 			
@@ -598,13 +631,16 @@ public class ProjectPanel
 			String command;
 			
 			command = selectedCommand.getStringCommand(projectName, searchBarInput);
-			previewTextArea.append(command+"\n\n");
 			
+			if(command.equals(""))
+			{
+				return;
+			}
+			
+			previewTextArea.append(command+"\n\n");	
 			updateMainListData();
+			updateTreeListData();
 			setComponentsVisibility();
-			//selectedCommand = null;
-			//commandSearchBar.setText("");
-			//commandSearchList.clearSelection();
 			commandSearchBar.requestFocus();
 			commandSearchBar.selectAll();
 		}		
@@ -674,8 +710,7 @@ public class ProjectPanel
 			//Unique data found
 			mainSearchBar.setFont(boldFont);
 			mainExistingNameLabel.setText(searchBarInput);		
-			mainNewLabel.setVisible(false);
-			
+			mainNewLabel.setVisible(false);	
 			updateCommandListData();
 		}
 		else
@@ -725,7 +760,6 @@ public class ProjectPanel
 		String searchBarInput;
 		boolean uniqueData = false;
 		
-		//commandSearchBar.setText("");
 		mainlistModel.removeAllElements();
 		searchBarInput = mainSearchBar.getText();
 		mainListData = DataCenter.getDataByNameKeyword(projectName, dataType, searchBarInput);
@@ -740,6 +774,111 @@ public class ProjectPanel
 			uniqueData = true;
 		}
 		return uniqueData;
+	}
+	
+	/**
+	 * 
+	 */
+	public void updateTreeListData()
+	{
+		ArrayList<Data> treeListData = new ArrayList<Data>();
+		ArrayList<String> dataSuffix = new ArrayList<String>();
+		String textToRender = "";
+		
+		if(dataType == DataType.DISK)
+		{
+			return;
+		}
+		
+		treeListData = DataCenter.getDataListByType(projectName, dataType);
+		
+		for(Data data : treeListData)
+		{
+			if(dataType == DataType.USER)
+			{	
+				DataUser dataUser;
+				String dataName;
+				String primaryGroup;
+				int firstRepeatCount;
+				int secondRepeatCount;			
+				
+				dataUser = (DataUser)data;	  
+				primaryGroup = dataUser.getPrimaryGroup();
+				dataSuffix = dataUser.getSecondaryGroups();
+				dataName = dataUser.getName();
+				firstRepeatCount = dataName.length()+1;
+				secondRepeatCount = firstRepeatCount+19;
+				
+				if(primaryGroup == null)
+				{
+					primaryGroup = "";
+				}
+				
+				for(int i = 0; i < dataSuffix.size(); i++)
+				{
+					if(dataSuffix.get(i) == null)
+					{
+						dataSuffix.remove(i);
+					}
+					else if(dataSuffix.get(i).equals("null"))
+					{
+						dataSuffix.remove(i);
+					}
+				}
+						
+				textToRender = textToRender.concat(dataName+"-->PrimaryGroup:"+primaryGroup+"\n"
+						+" ".repeat(firstRepeatCount)+"|\n"
+						+" ".repeat(firstRepeatCount)+"|-->SecondaryGroup:");  
+				
+				for(int i = 0; i< dataSuffix.size(); i++)
+				{
+					String user = dataSuffix.get(i);
+					if(i == 0)
+					{
+						textToRender = textToRender.concat(user+"\n");
+						continue;
+					}
+					textToRender = textToRender.concat("\n"+" ".repeat(secondRepeatCount)+user);								
+				}	
+			}
+			else if(dataType == DataType.GROUP)
+			{
+				DataGroup dataGroup;		
+				String dataName;
+				int firstRepeatCount;
+				
+				dataGroup = (DataGroup)data;	   	
+				dataSuffix = dataGroup.getUsers();
+				dataName = dataGroup.getName();
+				firstRepeatCount = dataName.length()+9;
+				textToRender = textToRender.concat(dataGroup.getName()+"-->Users:");
+				
+				for(int i = 0; i < dataSuffix.size(); i++)
+				{
+					if(dataSuffix.get(i) == null)
+					{
+						dataSuffix.remove(i);
+					}
+					else if(dataSuffix.get(i).equals("null"))
+					{
+						dataSuffix.remove(i);
+					}
+				}
+				
+				for(int i = 0; i< dataSuffix.size(); i++)
+				{
+					String group = dataSuffix.get(i);
+					if(i == 0)
+					{
+						textToRender = textToRender.concat(group);
+						continue;
+					}
+					textToRender = textToRender.concat("\n"+" ".repeat(firstRepeatCount)+group);								
+				}	
+			}	
+			textToRender = textToRender.concat("\n\n");
+		}
+		treeTextArea.setText(textToRender);
 	}
 	
 	/**

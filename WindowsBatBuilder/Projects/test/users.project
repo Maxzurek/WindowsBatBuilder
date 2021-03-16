@@ -9,20 +9,13 @@ project.data.DataUser
 (
 class java.lang.String:max~
 class java.lang.String:~
-class java.lang.String:~
-java.util.ArrayList<java.lang.String>:[]~
-)
-project.data.DataUser
-(
-class java.lang.String:joe~
-class java.lang.String:~
-class java.lang.String:~
-java.util.ArrayList<java.lang.String>:[]~
+class java.lang.String:group1~
+java.util.ArrayList<java.lang.String>:[Administrateurs]~
 )
 project.data.DataUser
 (
 class java.lang.String:bob~
 class java.lang.String:~
-class java.lang.String:~
-java.util.ArrayList<java.lang.String>:[]~
+class java.lang.String:group1~
+java.util.ArrayList<java.lang.String>:[Administrateurs]~
 )
